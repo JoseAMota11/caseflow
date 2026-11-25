@@ -1,5 +1,8 @@
 import { definePrismaConfig } from 'prisma/config';
 import { defineConfig as ormConfig } from '@prisma/orm-postgres/config';
+import { loadEnvFile } from 'node:process';
+
+loadEnvFile('.env');
 
 export default definePrismaConfig({
   orm: ormConfig({

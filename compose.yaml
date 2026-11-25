@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:18
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - caseflow_data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: caseflow_user
+      POSTGRES_DB: caseflow_dev
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not available}
+volumes:
+  caseflow_data:
