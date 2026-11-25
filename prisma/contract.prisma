@@ -1,0 +1,39 @@
+// use prisma-8
+
+enum Role {
+    @@type("pg/text@1")
+    Reviewer  = "REVIEWER"
+    Requester = "REQUESTER"
+}
+
+enum Status {
+    @@type("pg/text@1")
+    Pending = "PENDING"
+    Approved = "APPROVED"
+    Rejected = "REJECTED"
+}
+
+model User {
+    id Int @id @default(autoincrement())
+    name String
+    email String @unique
+    passwordHash String
+    role Role
+    createdAt DateTime @default(now())
+    createdRequests Request[] @relation("RequestCreator")
+    reviewedRequests Request[] @relation("ReviewerCreator")
+}
+
+model Request {
+    id Int @id @default(autoincrement())
+    createdById Int
+    reviewedById Int?
+    title String
+    description String
+    status Status @default(Pending)
+    createdAt DateTime @default(now())
+    decidedAt DateTime?
+
+    createdBy User @relation("RequestCreator", fields: [createdById], references: [id])
+    reviewedBy User? @relation("ReviewerCreator", fields: [reviewedById], references: [id])
+}
